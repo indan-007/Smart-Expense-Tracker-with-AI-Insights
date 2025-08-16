@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <meta name="description" content="A privacy-focused expense tracker PWA.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <header class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold">Expense Tracker</h1>
+            <div class="flex space-x-2">
+                <label for="csv-import-input" class="cursor-pointer px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Import CSV</label>
+                <input type="file" id="csv-import-input" class="hidden" accept=".csv">
+                <button id="export-csv-btn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">Export CSV</button>
+            </div>
+        </header>
+
+        <!-- Expense Form -->
+        <div id="expense-form-container" class="mb-4">
+            <form id="expense-form" class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4">Add/Edit Expense</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="hidden" id="expense-id">
+                    <div>
+                        <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+                        <input type="date" id="date" name="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    </div>
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                        <input type="text" id="category" name="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    </div>
+                    <div>
+                        <label for="merchant" class="block text-sm font-medium text-gray-700">Merchant</label>
+                        <input type="text" id="merchant" name="merchant" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    </div>
+                    <div>
+                        <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                        <input type="number" id="amount" name="amount" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
+                        <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-end space-x-2">
+                    <button type="button" id="cancel-edit-btn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 hidden">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Expense</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filters -->
+        <div id="filters-container" class="mb-4 bg-white p-4 rounded-lg shadow-md">
+            <form id="filter-form">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Date Range -->
+                    <div>
+                        <label for="filter-date-start" class="block text-sm font-medium text-gray-700">Date From</label>
+                        <input type="date" id="filter-date-start" name="date-start" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    </div>
+                    <div>
+                        <label for="filter-date-end" class="block text-sm font-medium text-gray-700">Date To</label>
+                        <input type="date" id="filter-date-end" name="date-end" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    </div>
+                    <!-- Category -->
+                    <div>
+                        <label for="filter-category" class="block text-sm font-medium text-gray-700">Category</label>
+                        <input type="text" id="filter-category" name="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., Groceries">
+                    </div>
+                    <!-- Merchant -->
+                    <div>
+                        <label for="filter-merchant" class="block text-sm font-medium text-gray-700">Merchant</label>
+                        <input type="text" id="filter-merchant" name="merchant" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="e.g., Supermarket">
+                    </div>
+                    <!-- Amount Range -->
+                    <div>
+                        <label for="filter-amount-min" class="block text-sm font-medium text-gray-700">Min Amount</label>
+                        <input type="number" id="filter-amount-min" name="amount-min" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="0">
+                    </div>
+                    <div>
+                        <label for="filter-amount-max" class="block text-sm font-medium text-gray-700">Max Amount</label>
+                        <input type="number" id="filter-amount-max" name="amount-max" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="1000">
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-end">
+                     <button type="button" id="reset-filters-btn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Reset Filters</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Charts -->
+        <div id="charts-container" class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4">Category Breakdown</h2>
+                <canvas id="category-chart"></canvas>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4">Monthly Trends</h2>
+                <canvas id="trends-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Expense Table -->
+        <div id="expense-table-container">
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4">Expenses</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr id="expense-table-header">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" aria-sort="none" data-sort-by="date">Date</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" aria-sort="none" data-sort-by="category">Category</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" aria-sort="none" data-sort-by="merchant">Merchant</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" aria-sort="none" data-sort-by="amount">Amount</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expense-table-body" class="bg-white divide-y divide-gray-200">
+                            <!-- Expense rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Budgets -->
+        <div id="budgets-container" class="mt-4 bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold mb-4">Budgets</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Set Budget</h3>
+                    <form id="budget-form" class="space-y-4">
+                        <div>
+                            <label for="budget-category" class="block text-sm font-medium text-gray-700">Category</label>
+                            <input type="text" id="budget-category" name="budget-category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                        </div>
+                        <div>
+                            <label for="budget-amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                            <input type="number" id="budget-amount" name="budget-amount" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Set Budget</button>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Current Budgets</h3>
+                    <ul id="budgets-list" class="space-y-2">
+                        <!-- Budget items will be inserted here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Insights -->
+        <div id="ai-insights-container" class="mt-4 bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold mb-4">AI Insights</h2>
+            <div class="text-center mb-4">
+                <button id="generate-insights-btn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Generate My Insights</button>
+            </div>
+            <div id="insights-output" class="p-4 bg-gray-50 rounded-lg hidden">
+                <h3 id="insights-title" class="text-lg font-semibold mb-2"></h3>
+                <div id="insights-message"></div>
+            </div>
+        </div>
+
+    </div>
+    <script src="js/main.js" type="module"></script>
+</body>
+</html>

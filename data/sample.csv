@@ -1,0 +1,13 @@
+date,category,merchant,amount,notes
+2024-07-01,Groceries,Supermarket,75.50,"Weekly shopping"
+2024-07-02,Transport,Metro,5.50,"Commute to work"
+2024-07-03,Dining Out,Pizza Place,25.00,"Lunch with colleagues"
+2024-07-05,Entertainment,Cinema,15.00,"Movie night"
+2024-07-07,Utilities,Electricity Bill,120.00,"Monthly bill"
+2024-07-10,Health,Pharmacy,20.25,"Medication"
+2024-07-15,Groceries,Supermarket,60.00,"Mid-month shopping"
+2024-07-18,Transport,Gas Station,50.00,"Fuel for car"
+2024-07-22,Shopping,Clothing Store,85.00,"New jeans"
+2024-07-25,Dining Out,Cafe,12.75,"Coffee and cake"
+2024-07-28,Groceries,Farmers Market,45.30,"Fresh produce"
+2024-07-30,Rent,Landlord,1200.00,"Monthly rent"
