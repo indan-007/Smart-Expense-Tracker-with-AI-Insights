@@ -51,4 +51,6 @@ This is a static web application. To run it, simply open `index.html` in a moder
 
 ---
 
+If you find this project useful, please consider giving it a ⭐!
+
 Built by Jules.
