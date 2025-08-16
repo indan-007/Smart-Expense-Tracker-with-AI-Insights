@@ -1,6 +1,13 @@
 # Smart Expense Tracker with AI Insights
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 A modern, privacy-focused, and installable Progressive Web App (PWA) for tracking personal expenses. Built with vanilla JavaScript, Tailwind CSS, and Chart.js, this application runs entirely in your browser, ensuring your financial data remains private.
+
+### Tech Stack
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![Tailwind CSS](https://img.shields.io/badge/tailwind_css-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Chart.js](https://img.shields.io/badge/chart.js-F5788D.svg?style=for-the-badge&logo=chart.js&logoColor=white)
 
 ## ✨ Features
 
